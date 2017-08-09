@@ -206,7 +206,7 @@ FakesAssemblies/
 *.opt
 
 # Project specific folders
-dist/
+docs/
 
 .DS_store
 
