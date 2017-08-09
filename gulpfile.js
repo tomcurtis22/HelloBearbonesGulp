@@ -25,7 +25,7 @@ gulp.task('default', function (done) {
 });
 
 gulp.task('clean', function () {
-    return del(['./dist/']);
+    return del(['./docs/']);
 });
 
 gulp.task('workflow-images', function () {
@@ -33,7 +33,7 @@ gulp.task('workflow-images', function () {
         .pipe(imagemin({
             progressive: true
         }))
-        .pipe(gulp.dest('./dist/img/'))
+        .pipe(gulp.dest('./docs/img/'))
 });
 
 gulp.task('workflow-styles', function () {
@@ -47,12 +47,12 @@ gulp.task('workflow-styles', function () {
         .pipe(cssnano())
         .pipe(rename('main.min.css'))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./dist/css/'))
+        .pipe(gulp.dest('./docs/css/'))
 });
 
 gulp.task('workflow-scripts', function () {
     return gulp.src('./src/www/scripts/all.js')
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest('./docs/js/'));
 });
 
 gulp.task('panini', function () {
@@ -64,7 +64,7 @@ gulp.task('panini', function () {
             helpers: './src/www/helpers/',
             data: './src/www/data/'
         }))
-        .pipe(gulp.dest('./dist/'))
+        .pipe(gulp.dest('./docs/'))
 });
 
 gulp.task('panini:refresh', function (done) {
@@ -75,7 +75,7 @@ gulp.task('panini:refresh', function (done) {
 
 gulp.task('browser', function (done) {
     browser.init({
-        server: './dist/',
+        server: './docs/',
         port: 8300
     });
     return done();
@@ -97,6 +97,6 @@ gulp.task('watch', function () {
         });
     gulp.watch(['./src/www/{layouts,partials,pages,helpers,data}/**/*'], 
         function () {
-            runSequence('panini', 'panini:refresh', 'browser:reload');
+            runSequence('panini:refresh', 'panini', 'browser:reload');
         });
 });
