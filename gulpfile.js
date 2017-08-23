@@ -1,19 +1,19 @@
-var autoprefixer = require('gulp-autoprefixer');
-    browser = require('browser-sync');
-    concat = require('gulp-concat');
-    cssnano = require('gulp-cssnano');
-    del = require('del');
-    gulp = require('gulp');
-    imagemin = require('gulp-imagemin');
-    panini = require('panini');
-    sass = require('gulp-sass');
-    sourcemaps = require('gulp-sourcemaps');
-    rename = require("gulp-rename");
-    runSequence = require('run-sequence');
-    uglify = require('gulp-uglify');
+autoprefixer = require('gulp-autoprefixer');
+browser = require('browser-sync');
+concat = require('gulp-concat');
+cssnano = require('gulp-cssnano');
+del = require('del');
+gulp = require('gulp');
+imagemin = require('gulp-imagemin');
+panini = require('panini');
+sass = require('gulp-sass');
+sourcemaps = require('gulp-sourcemaps');
+rename = require("gulp-rename");
+runSequence = require('run-sequence');
+uglify = require('gulp-uglify');
 
 gulp.task('build', function (done) {
-    return runSequence('clean', ['panini', 'workflow-images', 'workflow-styles', 'workflow-scripts'], function () {
+    return runSequence('clean', ['workflow-images', 'workflow-css', 'workflow-scripts', 'workflow-panini', 'workflow-configuration'], function () {
         done();
     });
 });
@@ -25,19 +25,19 @@ gulp.task('default', function (done) {
 });
 
 gulp.task('clean', function () {
-    return del(['./docs/']);
+    return del(['./docs']);
 });
 
 gulp.task('workflow-images', function () {
-    return gulp.src('./src/www/img/*')
+    return gulp.src('./src/images/*')
         .pipe(imagemin({
             progressive: true
         }))
         .pipe(gulp.dest('./docs/img/'))
 });
 
-gulp.task('workflow-styles', function () {
-    return gulp.src('./src/www/sass/main.scss')
+gulp.task('workflow-css', function () {
+    return gulp.src('./src/styles/main.scss')
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
@@ -51,33 +51,39 @@ gulp.task('workflow-styles', function () {
 });
 
 gulp.task('workflow-scripts', function () {
-    return gulp.src('./src/www/scripts/all.js')
+    return gulp.src('./src/scripts/*')
         .pipe(gulp.dest('./docs/js/'));
 });
 
-gulp.task('panini', function () {
-    return gulp.src('./src/www/pages/**/*.html')
+gulp.task('workflow-panini', function () {
+    return gulp.src('./src/views/pages/**/*.html')
         .pipe(panini({
-            root: './src/www/pages/',
-            layouts: './src/www/layouts/',
-            partials: './src/www/partials/',
-            helpers: './src/www/helpers/',
-            data: './src/www/data/'
+            root: './src/views/pages/',
+            layouts: './src/views/layouts/',
+            partials: './src/views/partials/',
+            helpers: './src/views/helpers/',
+            data: './src/views/data/'
         }))
         .pipe(gulp.dest('./docs/'))
 });
 
-gulp.task('panini:refresh', function (done) {
-    panini.refresh();
-
-    return done();
+gulp.task('workflow-configuration', function () {
+    return gulp.src('./src/configuration/*')  
+        .pipe(gulp.dest('./docs/'));
 });
 
 gulp.task('browser', function (done) {
     browser.init({
+        tunnel: true,        
         server: './docs/',
-        port: 8300
+        port: 1994
     });
+    return done();
+});
+
+gulp.task('workflow-panini:refresh', function (done) {
+    panini.refresh();
+
     return done();
 });
 
@@ -87,16 +93,16 @@ gulp.task('browser:reload', function (done) {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./src/www/sass/**/*.scss'],
+    gulp.watch(['./src/styles/**/*.scss'],
         function () {
-            runSequence('workflow-styles', 'browser:reload');
-        });    
-    gulp.watch(['./src/www/scripts/**/*.js'],
+            runSequence('workflow-css', 'browser:reload');
+        });
+    gulp.watch(['./src/scripts/**/*.js'],
         function () {
             runSequence('workflow-scripts', 'browser:reload');
         });
-    gulp.watch(['./src/www/{layouts,partials,pages,helpers,data}/**/*'], 
+    gulp.watch(['./src/views/{layouts,partials,pages,helpers,data}/**/*'],
         function () {
-            runSequence('panini:refresh', 'panini', 'browser:reload');
+            runSequence('workflow-panini:refresh', 'workflow-panini', 'browser:reload');
         });
 });

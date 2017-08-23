@@ -211,3 +211,5 @@ docs/
 .DS_store
 
 .npmrc
+
+package-lock.json

@@ -1,0 +1,121 @@
+.illustration {
+	position: absolute;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	&.space {
+		background-color: $base-color;
+		.container {
+			color: $base-pair;
+		}
+		.title {
+			text-align: center;
+			font-size: 40vw;
+
+			@include respond-to('md') {
+				text-align: left;
+				font-size: 20vw;
+			}
+		}
+		.moon {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+			svg {
+				display: block;
+				max-width: 100vh;
+				max-height: 100vh;
+				width: 75vw;
+				height: 75vw;
+				.hose,
+				.space-bear {
+					animation: grow-space-bear-animation 20s infinite;
+					animation-timing-function: cubic-bezier(.5, -.3, .5, 1.3);
+
+					will-change: grow-space-bear-animation;
+				}
+				.moon,
+				.base,
+				.flag {
+					animation: rotate-moon-animation 3s infinite;
+					animation-timing-function: cubic-bezier(.5, -.3, .5, 1.3);
+
+					will-change: rotate-moon-animation;
+				}
+			}
+		}
+		.star {
+			position: fixed;
+			z-index: 1;
+			width: .1875rem;
+			height: .1875rem;
+			border-radius: $border-radius-circle;
+			background-color: $base-pair;
+			color: $base-pair;
+			animation-timing-function: ease-in-out;
+
+			will-change: star-animation;
+			&.lg {
+				display: none;
+
+				@include respond-to('md') {
+					display: block;
+					width: .375rem;
+					height: .375rem;
+				}
+			}
+			@for $i from 1 through 200 {
+				&:nth-child(#{$i}) {
+					top: random(98)+ vh;
+					left: random(98)+ vw;
+					animation: star-animation random(10000) + 700 + ms infinite;
+				}
+				&.lg:nth-child(#{$i}) {
+					top: random(98)+ vh;
+					left: random(98)+ vw;
+					animation: star-animation random(10000) + 700 + ms infinite;
+				}
+			}
+		}
+	}
+}
+
+@keyframes star-animation {
+	0% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+	50% {
+		opacity: 0;
+		transform: scale(.8);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+}
+
+@keyframes grow-space-bear-animation {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.2)rotate(5deg);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes rotate-moon-animation {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(.25rem);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}

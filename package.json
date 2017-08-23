@@ -1,5 +1,5 @@
 {
-  "name": "startUp",
+  "name": "bearbones-styleguide",
   "version": "0.1.0",
   "description": "",
   "main": "",
@@ -29,6 +29,7 @@
     "run-sequence": "^2.1.0"
   },
   "dependencies": {
-    "bearbones": "^0.18.0"
+    "bearbones": "^0.19.7",
+    "csscomb": "^4.2.0"
   }
 }
