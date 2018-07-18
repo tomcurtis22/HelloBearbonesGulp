@@ -1,16 +1,16 @@
-autoprefixer = require('gulp-autoprefixer');
-browser = require('browser-sync');
-concat = require('gulp-concat');
-cssnano = require('gulp-cssnano');
-del = require('del');
-gulp = require('gulp');
-imagemin = require('gulp-imagemin');
-panini = require('panini');
-sass = require('gulp-sass');
-sourcemaps = require('gulp-sourcemaps');
-rename = require('gulp-rename');
-runSequence = require('run-sequence');
-uglify = require('gulp-uglify');
+var autoprefixer = require('gulp-autoprefixer');
+var browser = require('browser-sync');
+var concat = require('gulp-concat');
+var cssnano = require('gulp-cssnano');
+var del = require('del');
+var gulp = require('gulp');
+var imagemin = require('gulp-imagemin');
+var panini = require('panini');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
+var rename = require('gulp-rename');
+var runSequence = require('run-sequence');
+var uglify = require('gulp-uglify');
 
 gulp.task('build', function(done) {
   return runSequence(
